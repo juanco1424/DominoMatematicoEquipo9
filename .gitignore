@@ -1,0 +1,9 @@
+# Ignorar el directorio .idea/
+.idea/
+
+# Ignorar el directorio out/
+out/
+
+# Ignorar el archivo prueba.iml
+prueba.iml
+
