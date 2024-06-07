@@ -6,16 +6,16 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="455.0" prefWidth="875.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="prueba.PruebaViewController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="455.0" prefWidth="875.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dominoMatematico.DominoController">
    <children>
       <ListView fx:id="listFichas" layoutX="14.0" layoutY="371.0" orientation="HORIZONTAL" prefHeight="70.0" prefWidth="746.0" />
-      <Button fx:id="btnPasar" layoutX="770.0" layoutY="371.0" mnemonicParsing="false" onAction="#pasar" prefHeight="70.0" prefWidth="90.0" text="PASAR">
+      <Button fx:id="btnPasar" layoutX="770.0" layoutY="372.0" mnemonicParsing="false" onAction="#pasar" prefHeight="70.0" prefWidth="90.0" text="PASAR">
          <font>
             <Font size="20.0" />
          </font>
       </Button>
       <ListView fx:id="tablaDomino" layoutX="18.0" layoutY="159.0" orientation="HORIZONTAL" prefHeight="195.0" prefWidth="838.0" />
-      <Label fx:id="turneLabel" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="373.0" layoutY="14.0" text="TU TURNO" textAlignment="RIGHT" textFill="#0800c7">
+      <Label fx:id="turneLabel" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="373.0" layoutY="14.0" text="TU TURNO" textAlignment="RIGHT" textFill="#0800c7" AnchorPane.bottomAnchor="404.6" AnchorPane.leftAnchor="280.0" AnchorPane.rightAnchor="280.0" AnchorPane.topAnchor="14.0">
          <font>
             <Font name="System Bold" size="25.0" />
          </font>

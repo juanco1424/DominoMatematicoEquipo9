@@ -1,4 +1,4 @@
-package prueba;
+package dominoMatematico;
 
 import java.io.IOException;
 import javafx.application.Application;
@@ -7,7 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
-public class Prueba extends Application {
+public class Principal extends Application {
     
 
     public static void main(String[] args) {
@@ -17,8 +17,7 @@ public class Prueba extends Application {
     @Override
     public void start(Stage stage) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("PruebaView.fxml"));
-            //loader.setController(new PruebaViewController());
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("DominoView.fxml"));
             
             AnchorPane root = loader.load();
             Scene scene = new Scene(root);
@@ -30,5 +29,4 @@ public class Prueba extends Application {
             System.out.println("Error: " + e.getMessage());
         }
     }
-    
 }
