@@ -8,7 +8,7 @@ public class Domino {
     // Lado derecho de la ficha
     private int right;
     
-    // Si la ficha esta invertida (Se útiliza para cuando la ficha debe invertirse, en sí el lado derecho pasaría a ser el 
+    // Si la ficha está invertida (Se utiliza para cuando la ficha debe invertirse, en sí el lado derecho pasaría a ser el
     // lado izquierdo en este concepto, y el lado izquierdo pasaría a ser el lado derecho.
     private boolean invertir;
 

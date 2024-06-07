@@ -1,12 +1,9 @@
 package dominoMatematico;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+
 import javafx.scene.image.Image;
-import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -27,18 +24,18 @@ public class DominoController implements Initializable {
     private List<Image> dominoImages;
 
     // Bool el cual indicará cuando es el turno del jugador y cuando será el turno de la IA
-    private boolean turnoJugador = true;
+    private final boolean turnoJugador = true;
 
     @FXML
     private Button btnPasar;
 
-    // Esta Ficha es de referencia, se utiliza para saber cual es la última ficha puesta al lado Izquierdo.
+    // Esta Ficha es de referencia, se utiliza para saber cuál es la última ficha puesta al lado Izquierdo.
     private Domino ultIzquierda;
     
-    // Esta Ficha es de referencia, se utiliza para saber cual es la última ficha puesta al lado Derecho.
+    // Esta Ficha es de referencia, se utiliza para saber cuál es la última ficha puesta al lado Derecho.
     private Domino ultDerecha;
     
-    // La Lista de las Fichas puestas en el Tablero de Domino.
+    // La Lista de las Fichas puestas en el Tablero de Dominó.
     private List<Domino> fichasTablaDomino;
     
     // Este usuario es el Jugador, aquí se encuentran las fichas del Jugador.
@@ -50,7 +47,7 @@ public class DominoController implements Initializable {
     // Lista de todas las fichas disponibles en juego
     List<Domino> allFichas;
     
-    // ListView de la Tabla de Domino.
+    // ListView de la Tabla de Dominó.
     @FXML
     private ListView<Domino> tablaDomino;
     
@@ -73,7 +70,7 @@ public class DominoController implements Initializable {
         
         // Métodos necesarios...
         
-        // Cargar Imagenes
+        // Cargar Imágenes
         loadImages();
         
         // Sortear Fichas y Repartir
@@ -91,7 +88,7 @@ public class DominoController implements Initializable {
 
         try {
             for (int i = 0; i <= 6; i++) {
-                dominoImages.add(new Image(getClass().getResource("/domino_" + i + ".png").toString()));
+                dominoImages.add(new Image(Objects.requireNonNull(getClass().getResource("/domino_" + i + ".png")).toString()));
             }
         } catch (Exception e) {
             showAlert("Error loading images.");
@@ -126,169 +123,169 @@ public class DominoController implements Initializable {
             if(domino.isDouble()) {
                 // Ficha cualquiera (Vertical)
                 if(ultIzquierda.getLeft() == domino.getLeft() && !ultIzquierda.getInvertir()) {
-                    // Ultimo a la izquierda pero es la parte izquierda (invertir)
-                    
+                    // Último a la izquierda, pero es la parte izquierda (invertir)
+
                     domino.setInvertir(true);
                     addFichaTabla(domino , true);
                     ultIzquierda = domino;
-                    
+
                 } else if(ultIzquierda.getLeft() == domino.getRight() && !ultIzquierda.getInvertir()) {
-                    // Ultimo a la izquierda y es la parte derecha (no se necesita invertir)
-                    
+                    // Último a la izquierda y es la parte derecha (no se necesita invertir)
+
                     addFichaTabla(domino , true);
                     ultIzquierda = domino;
-                    
+
                 // Parte invertida
                 } else if(ultIzquierda.getRight() == domino.getLeft() && ultIzquierda.getInvertir()) {
-                    // Esta es por si esta invertida la ficha para el lado derecho
-                    
-                    // Ya como esta invertida, la ficha derecha contaría como ficha izquierda, y continuando con el mismo concepto
+                    // Esta es por si está invertida la ficha para el lado derecho
+
+                    // Ya como está invertida, la ficha derecha contaría como ficha izquierda, y continuando con el mismo concepto
                     // Se debe invertir
                     domino.setInvertir(true);
-                    //Con este añadido, se añadirá la ficha de Domino para la izquierda.
+                    //Con este añadido, se añadirá la ficha de Dominó para la izquierda.
                     addFichaTabla(domino , true); //Sin necesidad de organizar orden
                     ultIzquierda = domino;
-                    
+
                 } else if(ultIzquierda.getRight() == domino.getRight() && ultIzquierda.getInvertir()) {
-                    // Esta es por si esta invertida la ficha para el lado derecho
-                    
-                    // Ya como esta invertida, la ficha derecha contaría como ficha izquierda, y continuando con el mismo concepto
-                    // En esta caso, no se debe invertir
-                    
-                    //Con este añadido, se añadirá la ficha de Domino para la izquierda.
+                    // Esta es por si está invertida la ficha para el lado derecho
+
+                    // Ya como está invertida, la ficha derecha contaría como ficha izquierda, y continuando con el mismo concepto
+                    // En está caso, no se debe invertir
+
+                    //Con este añadido, se añadirá la ficha de Dominó para la izquierda.
                     addFichaTabla(domino , true); //Sin necesidad de organizar orden
                     ultIzquierda = domino;
-                    
+
                 } else if(ultDerecha.getRight() == domino.getLeft() && !ultDerecha.getInvertir()) {
-                    // Ultimo a la derecha y es la parte izquierda (no se necesita invertir)
-                    
-                    //Con este añadido, se añadirá la ficha de Domino para la derecha.
-                    addFichaTabla(domino , false); //Sin necesidad de organizar orden
-                    ultDerecha = domino;
-                    
-                } else if(ultDerecha.getRight() == domino.getRight() && !ultDerecha.getInvertir()) {
-                    // Ultimo a la derecha pero es la parte derecha (invetir)
-                    
-                    domino.setInvertir(true);
-                    //Con este añadido, se añadirá la ficha de Domino para la derecha.
-                    addFichaTabla(domino , false); //Ahora se organizará el orden correcto de la ficha
-                    ultDerecha = domino;
-                    
-                // Parte invertida
-                } else if(ultDerecha.getLeft() == domino.getLeft() && ultDerecha.getInvertir()) {
-                    // Esta es por si esta invertida la ficha para el lado izquierdo
-                    
-                    // Ya como esta invertida, la ficha izquierdo contaría como ficha derecha, y continuando con el mismo concepto
-                    // En esta caso, no se debe invertir
-                    
-                    //Con este añadido, se añadirá la ficha de Domino para la izquierda.
-                    addFichaTabla(domino , false); //Sin necesidad de organizar orden
-                    ultDerecha = domino;
-                } else if(ultDerecha.getLeft() == domino.getRight() && ultDerecha.getInvertir()) {
-                    // Esta es por si esta invertida la ficha para el lado izquierdo
-                    
-                    // Ya como esta invertida, la ficha izquierdo contaría como ficha derecha, y continuando con el mismo concepto
-                    // En esta caso, si se debe invertir
-                    domino.setInvertir(true);
-                    
-                    //Con este añadido, se añadirá la ficha de Domino para la izquierda.
-                    addFichaTabla(domino , false); //Sin necesidad de organizar orden
-                    ultDerecha = domino;
-                } else {
-                    showAlert("Esta ficha no puede ser usada");
-                    return;
-                }
-                
-                jugador.getFichas().remove(domino);
-                
-                // Función para cambiar de Jugador a IA y viceversa.
-                //turnoJugador = !turnoJugador;
-                
-            } else {
-                // Ficha cualquiera (Horizontal)
-                if(ultIzquierda.getLeft() == domino.getLeft() && !ultIzquierda.getInvertir()) {
-                    // Ultimo a la izquierda pero es la parte izquierda (invertir)
-                    
-                    domino.setInvertir(true);
-                    //Con este añadido, se añadirá la ficha de Domino para la izquierda.
-                    addFichaTabla(domino , true); //Ahora se organizará el orden correcto de la ficha
-                    ultIzquierda = domino;
-                    
-                } else if(ultIzquierda.getLeft() == domino.getRight() && !ultIzquierda.getInvertir()) {
-                    // Ultimo a la izquierda y es la parte derecha (no se necesita invertir)
-                    
-                    //Con este añadido, se añadirá la ficha de Domino para la izquierda.
-                    addFichaTabla(domino , true); //Sin necesidad de organizar orden
-                    ultIzquierda = domino;
-                   
-                // Parte para fichas invertidas
-                } else if(ultIzquierda.getRight() == domino.getLeft() && ultIzquierda.getInvertir()) {
-                    // Esta es por si esta invertida la ficha para el lado derecho
-                    
-                    // Ya como esta invertida, la ficha derecha contaría como ficha izquierda, y continuando con el mismo concepto
-                    // Se debe invertir
-                    domino.setInvertir(true);
-                    //Con este añadido, se añadirá la ficha de Domino para la izquierda.
-                    addFichaTabla(domino , true); //Sin necesidad de organizar orden
-                    ultIzquierda = domino;
-                    
-                } else if(ultIzquierda.getRight() == domino.getRight() && ultIzquierda.getInvertir()) {
-                    // Esta es por si esta invertida la ficha para el lado derecho
-                    
-                    // Ya como esta invertida, la ficha derecha contaría como ficha izquierda, y continuando con el mismo concepto
-                    // En esta caso, no se debe invertir
-                    
-                    //Con este añadido, se añadirá la ficha de Domino para la izquierda.
-                    addFichaTabla(domino , true); //Sin necesidad de organizar orden
-                    ultIzquierda = domino;
-                    
-                    
-                } else if(ultDerecha.getRight() == domino.getLeft() && !ultDerecha.getInvertir()) {
-                    // Ultimo a la derecha y es la parte izquierda (no se necesita invertir)
-                    
-                    //Con este añadido, se añadirá la ficha de Domino para la derecha.
+                    // Último a la derecha y es la parte izquierda (no se necesita invertir)
+
+                    //Con este añadido, se añadirá la ficha de Dominó para la derecha.
                     addFichaTabla(domino , false); //Sin necesidad de organizar orden
                     ultDerecha = domino;
 
-                    
                 } else if(ultDerecha.getRight() == domino.getRight() && !ultDerecha.getInvertir()) {
-                    // Ultimo a la derecha pero es la parte derecha (invetir)
-                    
+                    // Último a la derecha, pero es la parte derecha (invertir)
+
                     domino.setInvertir(true);
-                    //Con este añadido, se añadirá la ficha de Domino para la derecha.
+                    //Con este añadido, se añadirá la ficha de Dominó para la derecha.
                     addFichaTabla(domino , false); //Ahora se organizará el orden correcto de la ficha
-                    
                     ultDerecha = domino;
-                    
-                    
-                // Parte para fichas invertidas
+
+                // Parte invertida
                 } else if(ultDerecha.getLeft() == domino.getLeft() && ultDerecha.getInvertir()) {
-                    // Esta es por si esta invertida la ficha para el lado izquierdo
-                    
-                    // Ya como esta invertida, la ficha izquierdo contaría como ficha derecha, y continuando con el mismo concepto
-                    // En esta caso, no se debe invertir
-                    
-                    //Con este añadido, se añadirá la ficha de Domino para la izquierda.
+                    // Esta es por si está invertida la ficha para el lado izquierdo
+
+                    // Ya como está invertida, la ficha izquierda contaría como ficha derecha, y continuando con el mismo concepto
+                    // En está caso, no se debe invertir
+
+                    //Con este añadido, se añadirá la ficha de Dominó para la izquierda.
                     addFichaTabla(domino , false); //Sin necesidad de organizar orden
                     ultDerecha = domino;
-                    
                 } else if(ultDerecha.getLeft() == domino.getRight() && ultDerecha.getInvertir()) {
-                    // Esta es por si esta invertida la ficha para el lado izquierdo
-                    
-                    // Ya como esta invertida, la ficha izquierdo contaría como ficha derecha, y continuando con el mismo concepto
-                    // En esta caso, si se debe invertir
+                    // Esta es por si está invertida la ficha para el lado izquierdo
+
+                    // Ya como está invertida, la ficha izquierda contaría como ficha derecha, y continuando con el mismo concepto
+                    // En está caso, si se debe invertir
                     domino.setInvertir(true);
-                    
-                    //Con este añadido, se añadirá la ficha de Domino para la izquierda.
+
+                    //Con este añadido, se añadirá la ficha de Dominó para la izquierda.
                     addFichaTabla(domino , false); //Sin necesidad de organizar orden
                     ultDerecha = domino;
                 } else {
                     showAlert("Esta ficha no puede ser usada");
                     return;
                 }
-                
+
                 jugador.getFichas().remove(domino);
-                
+
+                // Función para cambiar de Jugador a IA y viceversa.
+                //turnoJugador = !turnoJugador;
+
+            } else {
+                // Ficha cualquiera (Horizontal)
+                if(ultIzquierda.getLeft() == domino.getLeft() && !ultIzquierda.getInvertir()) {
+                    // Último a la izquierda, pero es la parte izquierda (invertir)
+
+                    domino.setInvertir(true);
+                    //Con este añadido, se añadirá la ficha de Dominó para la izquierda.
+                    addFichaTabla(domino , true); //Ahora se organizará el orden correcto de la ficha
+                    ultIzquierda = domino;
+
+                } else if(ultIzquierda.getLeft() == domino.getRight() && !ultIzquierda.getInvertir()) {
+                    // Último a la izquierda y es la parte derecha (no se necesita invertir)
+
+                    //Con este añadido, se añadirá la ficha de Dominó para la izquierda.
+                    addFichaTabla(domino , true); //Sin necesidad de organizar orden
+                    ultIzquierda = domino;
+
+                // Parte para fichas invertidas
+                } else if(ultIzquierda.getRight() == domino.getLeft() && ultIzquierda.getInvertir()) {
+                    // Esta es por si está invertida la ficha para el lado derecho
+
+                    // Ya como está invertida, la ficha derecha contaría como ficha izquierda, y continuando con el mismo concepto
+                    // Se debe invertir
+                    domino.setInvertir(true);
+                    //Con este añadido, se añadirá la ficha de Dominó para la izquierda.
+                    addFichaTabla(domino , true); //Sin necesidad de organizar orden
+                    ultIzquierda = domino;
+
+                } else if(ultIzquierda.getRight() == domino.getRight() && ultIzquierda.getInvertir()) {
+                    // Esta es por si está invertida la ficha para el lado derecho
+
+                    // Ya como está invertida, la ficha derecha contaría como ficha izquierda, y continuando con el mismo concepto
+                    // En está caso, no se debe invertir
+
+                    //Con este añadido, se añadirá la ficha de Dominó para la izquierda.
+                    addFichaTabla(domino , true); //Sin necesidad de organizar orden
+                    ultIzquierda = domino;
+
+
+                } else if(ultDerecha.getRight() == domino.getLeft() && !ultDerecha.getInvertir()) {
+                    // Último a la derecha y es la parte izquierda (no se necesita invertir)
+
+                    //Con este añadido, se añadirá la ficha de Dominó para la derecha.
+                    addFichaTabla(domino , false); //Sin necesidad de organizar orden
+                    ultDerecha = domino;
+
+
+                } else if(ultDerecha.getRight() == domino.getRight() && !ultDerecha.getInvertir()) {
+                    // Último a la derecha, pero es la parte derecha (invertir)
+
+                    domino.setInvertir(true);
+                    //Con este añadido, se añadirá la ficha de Dominó para la derecha.
+                    addFichaTabla(domino , false); //Ahora se organizará el orden correcto de la ficha
+
+                    ultDerecha = domino;
+
+
+                // Parte para fichas invertidas
+                } else if(ultDerecha.getLeft() == domino.getLeft() && ultDerecha.getInvertir()) {
+                    // Esta es por si está invertida la ficha para el lado izquierdo
+
+                    // Ya como está invertida, la ficha izquierda contaría como ficha derecha, y continuando con el mismo concepto
+                    // En está caso, no se debe invertir
+
+                    //Con este añadido, se añadirá la ficha de Dominó para la izquierda.
+                    addFichaTabla(domino , false); //Sin necesidad de organizar orden
+                    ultDerecha = domino;
+
+                } else if(ultDerecha.getLeft() == domino.getRight() && ultDerecha.getInvertir()) {
+                    // Esta es por si está invertida la ficha para el lado izquierdo
+
+                    // Ya como está invertida, la ficha izquierda contaría como ficha derecha, y continuando con el mismo concepto
+                    // En está caso, si se debe invertir
+                    domino.setInvertir(true);
+
+                    //Con este añadido, se añadirá la ficha de Dominó para la izquierda.
+                    addFichaTabla(domino , false); //Sin necesidad de organizar orden
+                    ultDerecha = domino;
+                } else {
+                    showAlert("Esta ficha no puede ser usada");
+                    return;
+                }
+
+                jugador.getFichas().remove(domino);
+
                 // Función para cambiar de Jugador a IA y viceversa.
                 //turnoJugador = !turnoJugador;
             }
@@ -315,15 +312,15 @@ public class DominoController implements Initializable {
         fichasIALabel.setText("Fichas IA: " + ia.getFichas().size());
         
         
-        // Visualizador de Ultimo Izquierda y Ultimo Derecha
-        // if(ultIzquierda != null) {
+        // Visualizador de Último Izquierda y Último Derecha
+        /* if(ultIzquierda != null) {
         //    System.out.println("Último Izquierda:\n Izquierda: " + ultIzquierda.getLeft() + "\n Derecha: " + ultIzquierda.getRight() + "\n Esta Invertida: " + ultIzquierda.getInvertir());
         // }
-        
+
         // if(ultDerecha != null) {
         //    System.out.println("\n\nÚltimo Derecha:\n Izquierda: " + ultDerecha.getLeft() + "\n Derecha: " + ultDerecha.getRight() + "\n Esta Invertida: " + ultDerecha.getInvertir());
-        // }
-        
+        // } */
+
     }
         
     private void addFichaTabla(Domino domino , boolean index0) {
@@ -384,6 +381,7 @@ public class DominoController implements Initializable {
         
         // Este while se utilizará para sortear en 8 fichas al jugador y a la IA
         while (jugador.getFichas().size() < 8 || ia.getFichas().size() < 8) {
+            //TODO: El randomGet siempre dara 0, por que la necesidad de pedir un numero random quede cero?
             // Valor Random para saber quien toma la siguiente ficha
             int randomGet = new Random().nextInt(1);
             
@@ -394,7 +392,7 @@ public class DominoController implements Initializable {
                 jugador.getFichas().add(allFichas.get(index));
                 allFichas.remove(index);
                 
-            // Si por el contrario es 1 (IA) y sus fichas no superan las 8 permitidas de inicio se le da esa ficha
+            // Si, por el contrario, es 1 (IA) y sus fichas no superan las 8 permitidas de inicio se le da esa ficha
             } else if(ia.getFichas().size() < 8) {
                 int index = new Random().nextInt(allFichas.size());
 
@@ -409,7 +407,7 @@ public class DominoController implements Initializable {
     }
 
     private void setupPlayerHandListView() {
-        listFichas.setCellFactory((ListView<Domino> listView) -> new ListCell<Domino>() {
+        listFichas.setCellFactory((ListView<Domino> listView) -> new ListCell<>() {
             @Override
             protected void updateItem(Domino domino, boolean empty) {
                 super.updateItem(domino, empty);
@@ -419,7 +417,7 @@ public class DominoController implements Initializable {
                     ImageView bottomImage = new ImageView(dominoImages.get(domino.getRight()));
                     hBox.getChildren().addAll(topImage, bottomImage);
                     setGraphic(hBox);
-                    
+
                     hBox.setOnMouseClicked((t) -> selectTile(domino));
                 } else {
                     setGraphic(null);
@@ -431,15 +429,15 @@ public class DominoController implements Initializable {
     private void setupListaFichasTabla() {
         tablaDomino.setEditable(false);
         
-        tablaDomino.setCellFactory((ListView<Domino> listView) -> new ListCell<Domino>() {
+        tablaDomino.setCellFactory((ListView<Domino> listView) -> new ListCell<>() {
             @Override
             protected void updateItem(Domino domino, boolean empty) {
                 super.updateItem(domino, empty);
                 if (domino != null && !empty) {
                     HBox hBox = new HBox();
                     VBox vBox = new VBox();
-                    
-                    if(domino.isDouble()) {
+
+                    if (domino.isDouble()) {
                         // Vertical
                         ImageView topImage = new ImageView(dominoImages.get(domino.getInvertir() ? domino.getRight() : domino.getLeft()));
                         ImageView bottomImage = new ImageView(dominoImages.get(domino.getInvertir() ? domino.getLeft() : domino.getRight()));
@@ -461,14 +459,14 @@ public class DominoController implements Initializable {
 
     private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Precacuión");
+        alert.setTitle("Precaución");
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
     }
     
     @FXML
-    private void pasar(ActionEvent event) {
+    private void pasar(/*ActionEvent event*/) {
         System.out.println("PASASTE!");
         
         int index = new Random().nextInt(allFichas.size());
