@@ -1,7 +1,7 @@
 # DominoMatematicoEquipo9
 
 # Guía de Git
-Lo primero que se debe tener es git bash en el equipo/máquina les dejo un link si es necesario para que puedan instalarlo facil y sin complicaciones con este es el video [Link](https://www.youtube.com/watch?v=p9S1wSChtSo&ab_channel=Roelcode).
+Lo primero que se debe tener es git bash julian en el equipo/máquina les dejo un link si es necesario para que puedan instalarlo facil y sin complicaciones con este es el video [Link](https://www.youtube.com/watch?v=p9S1wSChtSo&ab_channel=Roelcode).
 
 Recuerden que para instalarlo correctamente deben validar que particion de windows tiene y cuantos bits es.
 
