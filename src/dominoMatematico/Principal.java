@@ -7,13 +7,26 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
+/**
+ * La clase Principal es el punto de entrada de la aplicacion de domino. Extiende la clase 
+ * Application de JavaFX y carga la interfaz grafica definida en DominoView.fxml.
+ */
 public class Principal extends Application {
     
-
+    /**
+     * El metodo main que lanza la aplicacion.
+     *
+     * @param args los argumentos de la linea de comandos
+     */
     public static void main(String[] args) {
         launch(args);
     }
 
+    /**
+     * Metodo de inicio de la aplicacion JavaFX. Carga el archivo FXML y configura la escena.
+     *
+     * @param stage el escenario principal de la aplicacion
+     */
     @Override
     public void start(Stage stage) {
         try {
